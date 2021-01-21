@@ -9,12 +9,21 @@ import SwiftUI
 
 //view is a struct so can contain attributes and methods
 struct ContentView: View {
-    let car = Car(company: "Mazda", model: "MZ-5", topSpeed: 125, acceleration: 7.7, handling: 5)
+    //brackets as you want a new one, not the whole struct
+    let starterCars = StarterCars()
+    var selectedCar: Int = 0
     
     //this must return something of type View
     var body: some View {
-        Text(car.displayStats())
-            .padding()
+        //some View is only one view i.e. body can only return one view and Button and Text are separate views, so you need VStack 
+        VStack {
+            Text(starterCars.cars[selectedCar].displayStats())
+                .padding()
+            Button("Random Car", action: {
+                print("Button pressed")
+            })
+        }
+        
     }
 }
 
