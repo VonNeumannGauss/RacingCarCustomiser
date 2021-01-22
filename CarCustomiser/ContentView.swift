@@ -22,7 +22,32 @@ struct ContentView: View {
     @State private var remainingFunds = 1000
     
     var isExhaustPackageEnabled: Bool {
-        return true
+        if remainingFunds >= 500 || exhaustPackage == true{
+            return true
+        } else {
+            return false
+        }
+    }
+    var isTiresPackageEnabled: Bool {
+        if remainingFunds >= 500 || tiresPackage == true {
+            return true
+        } else {
+            return false
+        }
+    }
+    var isGearsPackageEnabled: Bool {
+        if remainingFunds >= 500 || gearsPackage == true{
+            return true
+        } else {
+            return false
+        }
+    }
+    var isSupremePackageEnabled: Bool {
+        if remainingFunds >= 1000 || supremePackage == true{
+            return true
+        } else {
+            return false
+        }
     }
     
     //this must return something of type View
@@ -124,8 +149,11 @@ struct ContentView: View {
                     Toggle("Exhaust Package (cost: 500)", isOn: exhaustPackageBinding)
                         .disabled(!isExhaustPackageEnabled)
                     Toggle("Tires Package (cost: 500)", isOn: tiresPackageBinding)
+                        .disabled(!isTiresPackageEnabled)
                     Toggle("Gears Package (cost: 500)", isOn: gearsPackageBinding)
+                        .disabled(!isGearsPackageEnabled)
                     Toggle("Supreme Package (cost: 1000)", isOn: supremePackageBinding)
+                        .disabled(!isSupremePackageEnabled)
                 }
             }
             //because this is outside of the form (which can be scrolled through), it's position at the bottom of the screen is fixed
