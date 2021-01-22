@@ -10,23 +10,113 @@ import SwiftUI
 //view is a struct so can contain attributes and methods
 struct ContentView: View {
     //brackets as you want a new one, not the whole struct
-    let starterCars = StarterCars()
+    @State private var starterCars = StarterCars()
     //@State says that this variable influences the view - so any time it is updated, the view will be updated
     //worth making private because this will only be used by this view
     @State private var selectedCar: Int = 0
     
-    @State prviate var exhaustPackage = false
+    @State private var exhaustPackage = false
+    @State private var tiresPackage = false
+    @State private var gearsPackage = false
+    @State private var supremePackage = false
+    @State private var remainingFunds = 1000
     
     //this must return something of type View
     var body: some View {
-        //some View is only one view i.e. body can only return one view and Button and Text are separate views, so you need VStack 
-        VStack(alignment: .leading, spacing: 20) {
-            Text(starterCars.cars[selectedCar].displayStats())
-            Button("Next Car", action: {
-                selectedCar = (selectedCar + 1) % self.starterCars.cars.count
-            })
-            Toggle("Exhaust Package", isOn: <#T##Binding<Bool>#>)
+        
+        //new binding
+        let exhaustPackageBinding = Binding<Bool> (
+            get: { self.exhaustPackage },
+            set: { newValue in
+                self.exhaustPackage = newValue
+                
+                //update car with stats
+                
+                if newValue == true {
+                    starterCars.cars[selectedCar].topSpeed += 5
+                } else {
+                    starterCars.cars[selectedCar].topSpeed -= 5
+                }
+            }
+        )
+        
+        //new binding
+        let tiresPackageBinding = Binding<Bool> (
+            get: { self.tiresPackage },
+            set: { newValue in
+                self.tiresPackage = newValue
+                
+                //update car with stats
+                
+                if newValue == true {
+                    starterCars.cars[selectedCar].handling += 2
+                } else {
+                    starterCars.cars[selectedCar].handling -= 2
+                }
+            }
+        )
+        
+        //new binding
+        let gearsPackageBinding = Binding<Bool> (
+            get: { self.gearsPackage },
+            set: { newValue in
+                self.gearsPackage = newValue
+                
+                //update car with stats
+                
+                if newValue == true {
+                    starterCars.cars[selectedCar].acceleration -= 2
+                } else {
+                    starterCars.cars[selectedCar].acceleration += 2
+                }
+            }
+        )
+        
+        //new binding - this is how you write your own binding
+        let supremePackageBinding = Binding<Bool> (
+            get: { self.supremePackage },
+            set: { newValue in
+                self.supremePackage = newValue
+                
+                //update car with stats
+                
+                if newValue == true {
+                    starterCars.cars[selectedCar].topSpeed += 3
+                    starterCars.cars[selectedCar].handling += 1
+                    starterCars.cars[selectedCar].acceleration -= 1
+                } else {
+                    starterCars.cars[selectedCar].topSpeed -= 3
+                    starterCars.cars[selectedCar].handling -= 1
+                    starterCars.cars[selectedCar].acceleration += 1
+                }
+            }
+        )
+        VStack {
+            Form {
+                
+                //some View is only one view i.e. body can only return one view and Button and Text are separate views, so you need VStack
+                
+                VStack(alignment: .leading, spacing: 20) {
+                    Text(starterCars.cars[selectedCar].displayStats())
+                    Button("Next Car", action: {
+                        selectedCar = (selectedCar + 1) % self.starterCars.cars.count
+                    })
+                }
+                Section {
+                    
+                    //$ means that exhaustPackage becomes of type "Binding", so it can be modified through the toggle or as a raw variable in the program
+                    
+                    Toggle("Exhaust Package (cost: 500)", isOn: exhaustPackageBinding)
+                    Toggle("Tires Package (cost: 500)", isOn: tiresPackageBinding)
+                    Toggle("Gears Package (cost: 500)", isOn: gearsPackageBinding)
+                    Toggle("Supreme Package (cost: 1000)", isOn: supremePackageBinding)
+                }
+            }
+            //because this is outside of the form (which can be scrolled through), it's position at the bottom of the screen is fixed
+            
+            Text("Remaining Funds: \(remainingFunds)")
         }
+        
         
     }
 }
