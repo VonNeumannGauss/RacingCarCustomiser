@@ -21,6 +21,10 @@ struct ContentView: View {
     @State private var supremePackage = false
     @State private var remainingFunds = 1000
     
+    var isExhaustPackageEnabled: Bool {
+        return true
+    }
+    
     //this must return something of type View
     var body: some View {
         
@@ -34,8 +38,10 @@ struct ContentView: View {
                 
                 if newValue == true {
                     starterCars.cars[selectedCar].topSpeed += 5
+                    remainingFunds -= 500
                 } else {
                     starterCars.cars[selectedCar].topSpeed -= 5
+                    remainingFunds += 500
                 }
             }
         )
@@ -50,8 +56,10 @@ struct ContentView: View {
                 
                 if newValue == true {
                     starterCars.cars[selectedCar].handling += 2
+                    remainingFunds -= 500
                 } else {
                     starterCars.cars[selectedCar].handling -= 2
+                    remainingFunds += 500
                 }
             }
         )
@@ -66,8 +74,10 @@ struct ContentView: View {
                 
                 if newValue == true {
                     starterCars.cars[selectedCar].acceleration -= 2
+                    remainingFunds -= 500
                 } else {
                     starterCars.cars[selectedCar].acceleration += 2
+                    remainingFunds += 500
                 }
             }
         )
@@ -84,10 +94,14 @@ struct ContentView: View {
                     starterCars.cars[selectedCar].topSpeed += 3
                     starterCars.cars[selectedCar].handling += 1
                     starterCars.cars[selectedCar].acceleration -= 1
+                    
+                    remainingFunds -= 1000
                 } else {
                     starterCars.cars[selectedCar].topSpeed -= 3
                     starterCars.cars[selectedCar].handling -= 1
                     starterCars.cars[selectedCar].acceleration += 1
+                    
+                    remainingFunds += 1000
                 }
             }
         )
@@ -100,6 +114,7 @@ struct ContentView: View {
                     Text(starterCars.cars[selectedCar].displayStats())
                     Button("Next Car", action: {
                         selectedCar = (selectedCar + 1) % self.starterCars.cars.count
+                        resetDisplay()
                     })
                 }
                 Section {
@@ -107,6 +122,7 @@ struct ContentView: View {
                     //$ means that exhaustPackage becomes of type "Binding", so it can be modified through the toggle or as a raw variable in the program
                     
                     Toggle("Exhaust Package (cost: 500)", isOn: exhaustPackageBinding)
+                        .disabled(!isExhaustPackageEnabled)
                     Toggle("Tires Package (cost: 500)", isOn: tiresPackageBinding)
                     Toggle("Gears Package (cost: 500)", isOn: gearsPackageBinding)
                     Toggle("Supreme Package (cost: 1000)", isOn: supremePackageBinding)
@@ -115,9 +131,21 @@ struct ContentView: View {
             //because this is outside of the form (which can be scrolled through), it's position at the bottom of the screen is fixed
             
             Text("Remaining Funds: \(remainingFunds)")
+                .foregroundColor(.red)
+                .baselineOffset(20.0)
         }
+    }
+    func resetDisplay() {
+        //turn off toggles
+        exhaustPackage = false
+        tiresPackage = false
+        gearsPackage = false
+        supremePackage = false
         
-        
+        //reset values in starterCars
+        starterCars = StarterCars()
+        //reset funds
+        remainingFunds = 1000
     }
 }
 
