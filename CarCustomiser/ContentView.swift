@@ -37,6 +37,10 @@ struct ContentView: View {
         return (remainingFunds >= 1000 || supremePackage == true) && (remainingTime > 0)
     }
     
+    var isNextCarButtonEnabled: Bool {
+        return (remainingTime > 0)
+    }
+    
     //gives regular timing signals for use in the countdown timer
     let timer = Timer.publish(every: 1, on: .main, in: .common)
         .autoconnect()
@@ -143,7 +147,7 @@ struct ContentView: View {
                     Button("Next Car", action: {
                         selectedCar = (selectedCar + 1) % self.starterCars.cars.count
                         resetDisplay()
-                    })
+                    }).disabled(!isNextCarButtonEnabled)
                 }
                 Section {
                     
