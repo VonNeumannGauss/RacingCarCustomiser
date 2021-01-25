@@ -20,35 +20,27 @@ struct ContentView: View {
     @State private var gearsPackage = false
     @State private var supremePackage = false
     @State private var remainingFunds = 1000
+    @State private var remainingTime = 30
     
     var isExhaustPackageEnabled: Bool {
-        if remainingFunds >= 500 || exhaustPackage == true{
-            return true
-        } else {
-            return false
-        }
+        //ternary operator - X ? <what to do if true> ! <what to do if it's false> (no <> needed)
+        return (remainingFunds >= 500 || exhaustPackage == true) && (remainingTime > 0)
+        
     }
     var isTiresPackageEnabled: Bool {
-        if remainingFunds >= 500 || tiresPackage == true {
-            return true
-        } else {
-            return false
-        }
+        return (remainingFunds >= 500 || tiresPackage == true) && (remainingTime > 0)
     }
     var isGearsPackageEnabled: Bool {
-        if remainingFunds >= 500 || gearsPackage == true{
-            return true
-        } else {
-            return false
-        }
+        return (remainingFunds >= 500 || gearsPackage == true) && (remainingTime > 0)
     }
     var isSupremePackageEnabled: Bool {
-        if remainingFunds >= 1000 || supremePackage == true{
-            return true
-        } else {
-            return false
-        }
+        return (remainingFunds >= 1000 || supremePackage == true) && (remainingTime > 0)
     }
+    
+    //gives regular timing signals for use in the countdown timer
+    let timer = Timer.publish(every: 1, on: .main, in: .common)
+        .autoconnect()
+    
     
     //this must return something of type View
     var body: some View {
@@ -131,6 +123,17 @@ struct ContentView: View {
             }
         )
         VStack {
+            
+            Text("\(remainingTime)")
+                .onReceive(timer) { _ in
+                    if self.remainingTime > 0 {
+                        self.remainingTime -= 1
+                    } else {
+                        resetDisplay()
+                    }
+                }
+                .foregroundColor(.red)
+            
             Form {
                 
                 //some View is only one view i.e. body can only return one view and Button and Text are separate views, so you need VStack

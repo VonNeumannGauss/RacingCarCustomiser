@@ -21,14 +21,25 @@ class CarCustomiserUITests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    //verbose names are good because they tell you what's happening
+    func testWhenBoughtTiresAndExhaustPackageOtherPackagesDisabled() throws {
+        //arrange
         let app = XCUIApplication()
         app.launch()
-
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        //act (the form creates tables) (created by the recording feature!)
+        let tablesQuery = app.tables
+        //each of these gives something called "XCUIElement" (not including the.tap()
+        tablesQuery/*@START_MENU_TOKEN@*/.switches["Exhaust Package (cost: 500)"]/*[[".cells[\"Exhaust Package (cost: 500)\"].switches[\"Exhaust Package (cost: 500)\"]",".switches[\"Exhaust Package (cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        tablesQuery/*@START_MENU_TOKEN@*/.switches["Tires Package (cost: 500)"]/*[[".cells[\"Tires Package (cost: 500)\"].switches[\"Tires Package (cost: 500)\"]",".switches[\"Tires Package (cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        //assert
+        XCTAssertEqual(tablesQuery/*@START_MENU_TOKEN@*/.switches["Gears Package (cost: 500)"]/*[[".cells[\"Gears Package (cost: 500)\"].switches[\"Gears Package (cost: 500)\"]",".switches[\"Gears Package (cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled, false)
+        XCTAssertEqual(tablesQuery/*@START_MENU_TOKEN@*/.switches["Supreme Package (cost: 1000)"]/*[[".cells[\"Supreme Package (cost: 1000)\"].switches[\"Supreme Package (cost: 1000)\"]",".switches[\"Supreme Package (cost: 1000)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled, false)
+        
+        
+       
+        
     }
 
     func testLaunchPerformance() throws {
