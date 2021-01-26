@@ -37,8 +37,34 @@ class CarCustomiserUITests: XCTestCase {
         XCTAssertEqual(tablesQuery/*@START_MENU_TOKEN@*/.switches["Gears Package (cost: 500)"]/*[[".cells[\"Gears Package (cost: 500)\"].switches[\"Gears Package (cost: 500)\"]",".switches[\"Gears Package (cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled, false)
         XCTAssertEqual(tablesQuery/*@START_MENU_TOKEN@*/.switches["Supreme Package (cost: 1000)"]/*[[".cells[\"Supreme Package (cost: 1000)\"].switches[\"Supreme Package (cost: 1000)\"]",".switches[\"Supreme Package (cost: 1000)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled, false)
         
+    }
+    
+    func testWhenSupremePackageBoughtOtherPackagesDisabled() throws {
+        //arrange
+        let app = XCUIApplication()
+        app.launch()
         
-       
+        //act
+        let tablesQuery = XCUIApplication().tables
+        tablesQuery/*@START_MENU_TOKEN@*/.switches["Supreme Package (cost: 1000)"]/*[[".cells[\"Supreme Package (cost: 1000)\"].switches[\"Supreme Package (cost: 1000)\"]",".switches[\"Supreme Package (cost: 1000)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        //assert
+        XCTAssertEqual(tablesQuery/*@START_MENU_TOKEN@*/.switches["Exhaust Package (cost: 500)"]/*[[".cells[\"Exhaust Package (cost: 500)\"].switches[\"Exhaust Package (cost: 500)\"]",".switches[\"Exhaust Package (cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled, false)
+        XCTAssertEqual(tablesQuery/*@START_MENU_TOKEN@*/.switches["Tires Package (cost: 500)"]/*[[".cells[\"Tires Package (cost: 500)\"].switches[\"Tires Package (cost: 500)\"]",".switches[\"Tires Package (cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled, false)
+        XCTAssertEqual(tablesQuery/*@START_MENU_TOKEN@*/.switches["Gears Package (cost: 500)"]/*[[".cells[\"Gears Package (cost: 500)\"].switches[\"Gears Package (cost: 500)\"]",".switches[\"Gears Package (cost: 500)\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.isEnabled, false)
+        
+    }
+    
+    func testWhenButtonPressedNewCarPresent() throws {
+        //arrange
+        let app = XCUIApplication()
+        app.launch()
+        
+        //act
+        app.tables/*@START_MENU_TOKEN@*/.buttons["Next Car"]/*[[".cells[\"Manufacturer: Mazda \\nModel: MZ-5 \\nTop speed: 125mph \\nAcceleration (0-60): 7.7s \\nHandling: 5, Next Car\"].buttons[\"Next Car\"]",".buttons[\"Next Car\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        //assert
+        
+        //how to query what is in a particular location??????
         
     }
 
